@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学霸教育锻炼最强大脑小游戏</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Marker Felt', 'Arial Rounded MT Bold', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #FFF9F0;
+            color: #5E5343;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #FFFDF8;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #F8E0C8;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #E97F7F;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            text-shadow: 2px 2px 0px rgba(255,255,255,0.8);
+        }
+        
+        .game-section {
+            background-color: #FFFDF8;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 2px solid #F8E0C8;
+        }
+        
+        .game-title {
+            color: #E97F7F;
+            border-bottom: 3px dotted #F8C8C8;
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-size: 1.8em;
+        }
+        
+        .game-description {
+            margin-bottom: 20px;
+            color: #8B7D6B;
+            font-size: 1.1em;
+            line-height: 1.7;
+        }
+        
+        button {
+            background-color: #F8C8C8;
+            color: #5E5343;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 8px;
+            transition: all 0.3s;
+            font-family: 'Comic Sans MS', sans-serif;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background-color: #E97F7F;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            background-color: #E0D5C8;
+            cursor: not-allowed;
+            color: #A89C8B;
+        }
+        
+        select {
+            padding: 8px 12px;
+            border-radius: 50px;
+            border: 2px solid #F8C8C8;
+            background-color: #FFFDF8;
+            font-family: 'Comic Sans MS', sans-serif;
+            margin-right: 10px;
+        }
+        
+        label {
+            font-weight: bold;
+            color: #8B7D6B;
+            margin-right: 10px;
+        }
+        
+        /* 舒尔特方格样式 */
+        #schulte-grid-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        #schulte-grid {
+            display: grid;
+            grid-gap: 8px;
+            margin: 20px 0;
+        }
+        
+        .schulte-cell {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #F8E0C8;
+            border-radius: 12px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #5E5343;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+        }
+        
+        .schulte-cell:hover {
+            background-color: #F8C8C8;
+        }
+        
+        .schulte-cell.active {
+            background-color: #A8E6A8;
+            color: white;
+            transform: scale(0.95);
+        }
+        
+        .schulte-cell.wrong {
+            background-color: #FFAAAA;
+            color: white;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        
+        #schulte-timer {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #E97F7F;
+            font-family: 'Courier New', monospace;
+        }
+        
+        /* 记忆扑克牌样式 */
+        #memory-game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        #memory-grid {
+            display: grid;
+            grid-gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .memory-card {
+            width: 90px;
+            height: 130px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        
+        .memory-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .memory-card.flipped .memory-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .memory-card-front, .memory-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+        }
+        
+        .memory-card-front {
+            background-color: #F8C8C8;
+            color: white;
+            transform: rotateY(180deg);
+        }
+        
+        .memory-card-back {
+            background-color: #F8E0C8;
+            color: #F8E0C8;
+            border: 3px dotted #F8C8C8;
+        }
+        
+        .memory-card.matched {
+            opacity: 0.6;
+            cursor: default;
+            transform: scale(0.95);
+        }
+        
+        #memory-timer, #memory-moves {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #E97F7F;
+            font-family: 'Courier New', monospace;
+        }
+        
+        /* 反应力游戏样式 */
+        #reaction-game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        #reaction-cards-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            border: 3px dotted #F8C8C8;
+            border-radius: 20px;
+            margin: 20px 0;
+            background-color: #FFF9F0;
+            overflow: hidden;
+        }
+        
+        .reaction-card {
+            width: 80px;
+            height: 80px;
+            background-color: #FFAAAA;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.5s ease-out;
+            position: absolute;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .reaction-card.green {
+            background-color: #A8E6A8;
+            transform: scale(1.1);
+        }
+        
+        .reaction-card.clicked {
+            transform: scale(0.9);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        #reaction-timer {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #E97F7F;
+            font-family: 'Courier New', monospace;
+        }
+        
+        #reaction-results {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #8B7D6B;
+        }
+        
+        #reaction-results span {
+            font-weight: bold;
+            color: #E97F7F;
+        }
+        
+        /* 斯特鲁普效应游戏样式 */
+        #stroop-game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        #stroop-word {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 30px 0;
+            padding: 30px;
+            border-radius: 20px;
+            background-color: #FFF9F0;
+            border: 3px dotted #F8C8C8;
+            min-width: 300px;
+            text-align: center;
+        }
+        
+        .color-option {
+            width: 120px;
+            height: 60px;
+            margin: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #FFFDF8 !important;
+            color: #5E5343 !important;
+            border: 2px solid #F8C8C8;
+            border-radius: 50px;
+            transition: all 0.3s;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.05);
+            background-color: #F8E0C8 !important;
+        }
+        
+        #stroop-timer {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #E97F7F;
+            font-family: 'Courier New', monospace;
+        }
+        
+        #stroop-results {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #8B7D6B;
+        }
+        
+        #stroop-results span {
+            font-weight: bold;
+            color: #E97F7F;
+        }
+        
+        /* 选项卡样式 */
+        .tab {
+            overflow: hidden;
+            border: 2px solid #F8C8C8;
+            background-color: #FFFDF8;
+            border-radius: 15px 15px 0 0;
+            margin-bottom: -1px;
+        }
+        
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 20px;
+            transition: 0.3s;
+            color: #8B7D6B;
+            font-size: 16px;
+            border-radius: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+        
+        .tab button:hover {
+            background-color: #F8E0C8;
+            color: #5E5343;
+        }
+        
+        .tab button.active {
+            background-color: #F8C8C8;
+            color: #5E5343;
+            font-weight: bold;
+        }
+        
+        .tabcontent {
+            display: none;
+            padding: 25px;
+            border: 2px solid #F8C8C8;
+            border-top: none;
+            border-radius: 0 0 15px 15px;
+            background-color: #FFFDF8;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .game-summary {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #FFF9F0;
+            border-radius: 15px;
+            border-left: 5px solid #F8C8C8;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .game-summary h3 {
+            color: #E97F7F;
+            margin-top: 0;
+            border-bottom: 2px dotted #F8C8C8;
+            padding-bottom: 10px;
+        }
+        
+        .game-summary p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .game-title {
+                font-size: 1.5em;
+            }
+            
+            .schulte-cell {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            .memory-card {
+                width: 70px;
+                height: 100px;
+            }
+            
+            .memory-card-front, .memory-card-back {
+                font-size: 24px;
+            }
+            
+            #reaction-cards-container {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .reaction-card {
+                width: 60px;
+                height: 60px;
+                font-size: 20px;
+            }
+            
+            #stroop-word {
+                font-size: 36px;
+                padding: 20px;
+                min-width: 250px;
+            }
+            
+            .color-option {
+                width: 100px;
+                height: 50px;
+                font-size: 16px;
+                margin: 8px;
+            }
+            
+            .tab button {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>学霸教育锻炼最强大脑小游戏</h1>
+        
+        <div class="tab">
+            <button class="tablinks active" onclick="openGame(event, 'schulte')">舒尔特方格 Schulte Grid</button>
+            <button class="tablinks" onclick="openGame(event, 'memory')">记忆扑克牌 Memory Cards</button>
+            <button class="tablinks" onclick="openGame(event, 'reaction')">反应力游戏 Reaction Test</button>
+            <button class="tablinks" onclick="openGame(event, 'stroop')">斯特鲁普效应 Stroop Effect</button>
+        </div>
+        
+        <!-- 舒尔特方格游戏 -->
+        <div id="schulte" class="tabcontent" style="display: block;">
+            <h2 class="game-title">舒尔特方格 Schulte Grid</h2>
+            <p class="game-description">
+                舒尔特方格是一种注意力训练方法。游戏规则：按数字顺序点击方格中的数字，从1开始依次点击，直到点击完所有数字。
+                完成后会显示你的用时，用时越短说明注意力越集中。<br>
+                The Schulte Grid is an attention training method. Game rules: Click the numbers in the grid in order from 1 to the highest number.
+                Your completion time will be displayed at the end. Shorter times indicate better concentration.
+            </p>
+            
+            <div id="schulte-grid-container">
+                <div>
+                    <label for="schulte-size">选择方格大小 Grid Size:</label>
+                    <select id="schulte-size">
+                        <option value="3">3×3</option>
+                        <option value="4">4×4</option>
+                        <option value="5" selected>5×5</option>
+                        <option value="6">6×6</option>
+                        <option value="7">7×7</option>
+                    </select>
+                    <button id="schulte-start">开始游戏 Start Game</button>
+                </div>
+                
+                <div id="schulte-timer">00:00:00</div>
+                
+                <div id="schulte-grid"></div>
+                
+                <div id="schulte-result"></div>
+            </div>
+        </div>
+        
+        <!-- 记忆扑克牌游戏 -->
+        <div id="memory" class="tabcontent">
+            <h2 class="game-title">记忆扑克牌 Memory Cards</h2>
+            <p class="game-description">
+                记忆扑克牌游戏可以训练你的短期记忆能力。游戏规则：点击翻开两张牌，如果图案相同则保持翻开状态，
+                如果不同则会翻回去。记住牌的位置，找出所有相同的牌对。<br>
+                The Memory Card game trains your short-term memory. Game rules: Flip two cards at a time. If they match, they stay face-up.
+                If not, they flip back. Remember card positions to find all matching pairs.
+            </p>
+            
+            <div id="memory-game-container">
+                <div>
+                    <label for="memory-pairs">选择牌对数 Number of Pairs:</label>
+                    <select id="memory-pairs">
+                        <option value="4">4对 4 pairs</option>
+                        <option value="6" selected>6对 6 pairs</option>
+                        <option value="8">8对 8 pairs</option>
+                        <option value="10">10对 10 pairs</option>
+                    </select>
+                    <button id="memory-start">开始游戏 Start Game</button>
+                    <button id="memory-restart" disabled>重新开始 Restart</button>
+                </div>
+                
+                <div id="memory-timer">00:00:00</div>
+                <div id="memory-moves">翻牌次数 Moves: 0</div>
+                
+                <div id="memory-grid"></div>
+                
+                <div id="memory-result"></div>
+            </div>
+        </div>
+        
+        <!-- 反应力游戏 -->
+        <div id="reaction" class="tabcontent">
+            <h2 class="game-title">反应力游戏 Reaction Test</h2>
+            <p class="game-description">
+                反应力游戏测试你的反应速度和注意力。游戏规则：5张卡片会在方形格子中快速移动，其中一张会变成绿色。
+                你需要尽快点击绿色的卡片才能得分。游戏时间为1分钟，点击正确的绿色卡片越多，得分越高。<br>
+                The Reaction Test measures your reaction speed and attention. Game rules: 5 cards will move quickly in a square grid, with one turning green.
+                Click the green card as quickly as possible to score. The game lasts 1 minute - more correct clicks mean higher scores.
+            </p>
+            
+            <div id="reaction-game-container">
+                <button id="reaction-start">开始游戏 Start Game</button>
+                
+                <div id="reaction-timer">剩余时间 Time Left: 1:00</div>
+                
+                <div id="reaction-cards-container"></div>
+                
+                <div id="reaction-results">
+                    <p>得分 Score: <span id="reaction-score">0</span></p>
+                    <p>正确点击 Correct: <span id="reaction-correct">0</span></p>
+                    <p>错误点击 Wrong: <span id="reaction-wrong">0</span></p>
+                </div>
+                
+                <div id="reaction-summary" class="game-summary" style="display: none;"></div>
+            </div>
+        </div>
+        
+        <!-- 斯特鲁普效应游戏 -->
+        <div id="stroop" class="tabcontent">
+            <h2 class="game-title">斯特鲁普效应实验 Stroop Effect</h2>
+            <p class="game-description">
+                斯特鲁普效应展示了当文字含义与文字颜色不一致时，人们的反应会变慢。游戏规则：忽略文字本身的含义，
+                选择文字实际显示的颜色。完成1分钟内尽可能多的测试，会显示你在一致和不一致条件下的平均反应时间。<br>
+                The Stroop Effect demonstrates slower reaction times when word meaning and color don't match. Game rules: Ignore the word's meaning,
+                select the actual color it's displayed in. Complete as many tests as possible in 1 minute to see your average times.
+            </p>
+            
+            <div id="stroop-game-container">
+                <button id="stroop-start">开始测试 Start Test</button>
+                
+                <div id="stroop-timer">剩余时间 Time Left: 1:00</div>
+                
+                <div id="stroop-word">准备开始 Get Ready</div>
+                
+                <div id="stroop-options">
+                    <button class="color-option" data-color="red">红色 Red</button>
+                    <button class="color-option" data-color="green">绿色 Green</button>
+                    <button class="color-option" data-color="blue">蓝色 Blue</button>
+                    <button class="color-option" data-color="yellow">黄色 Yellow</button>
+                    <button class="color-option" data-color="purple">紫色 Purple</button>
+                    <button class="color-option" data-color="orange">橙色 Orange</button>
+                </div>
+                
+                <div id="stroop-results">
+                    <p>已完成测试 Tests Completed: <span id="stroop-count">0</span></p>
+                    <p>一致条件平均时间 Congruent Avg: <span id="stroop-congruent">-</span> ms</p>
+                    <p>不一致条件平均时间 Incongruent Avg: <span id="stroop-incongruent">-</span> ms</p>
+                </div>
+                
+                <div id="stroop-summary" class="game-summary" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 选项卡功能
+        function openGame(evt, gameName) {
+            var i, tabcontent, tablinks;
+            
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            
+            document.getElementById(gameName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        
+        // 舒尔特方格游戏
+        (function() {
+            const gridContainer = document.getElementById('schulte-grid');
+            const startButton = document.getElementById('schulte-start');
+            const sizeSelect = document.getElementById('schulte-size');
+            const timerDisplay = document.getElementById('schulte-timer');
+            const resultDisplay = document.getElementById('schulte-result');
+            
+            let gridSize = 5;
+            let currentNumber = 1;
+            let startTime;
+            let timerInterval;
+            let isPlaying = false;
+            
+            // 生成随机数字数组
+            function generateRandomNumbers(size) {
+                const totalNumbers = size * size;
+                const numbers = [];
+                
+                for (let i = 1; i <= totalNumbers; i++) {
+                    numbers.push(i);
+                }
+                
+                // 打乱数组
+                return numbers.sort(() => Math.random() - 0.5);
+            }
+            
+            // 创建方格
+            function createGrid() {
+                gridContainer.innerHTML = '';
+                gridContainer.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+                
+                const numbers = generateRandomNumbers(gridSize);
+                
+                numbers.forEach(num => {
+                    const cell = document.createElement('div');
+                    cell.className = 'schulte-cell';
+                    cell.textContent = num;
+                    cell.dataset.number = num;
+                    cell.addEventListener('click', handleCellClick);
+                    gridContainer.appendChild(cell);
+                });
+            }
+            
+            // 处理单元格点击
+            function handleCellClick(e) {
+                if (!isPlaying) return;
+                
+                const clickedNumber = parseInt(e.target.dataset.number);
+                
+                if (clickedNumber === currentNumber) {
+                    // 点击了正确的数字
+                    e.target.classList.add('active');
+                    currentNumber++;
+                    
+                    // 检查是否完成
+                    if (currentNumber > gridSize * gridSize) {
+                        endGame();
+                    }
+                } else {
+                    // 点击了错误的数字
+                    e.target.classList.add('wrong');
+                    setTimeout(() => {
+                        e.target.classList.remove('wrong');
+                    }, 500);
+                }
+            }
+            
+            // 开始游戏
+            function startGame() {
+                gridSize = parseInt(sizeSelect.value);
+                currentNumber = 1;
+                isPlaying = true;
+                startButton.disabled = true;
+                resultDisplay.textContent = '';
+                
+                createGrid();
+                
+                // 启动计时器
+                startTime = new Date().getTime();
+                timerInterval = setInterval(updateTimer, 10);
+            }
+            
+            // 更新计时器
+            function updateTimer() {
+                const currentTime = new Date().getTime();
+                const elapsedTime = currentTime - startTime;
+                
+                const hours = Math.floor(elapsedTime / 3600000);
+                const minutes = Math.floor((elapsedTime % 3600000) / 60000);
+                const seconds = Math.floor((elapsedTime % 60000) / 1000);
+                const milliseconds = Math.floor(elapsedTime % 1000);
+                
+                timerDisplay.textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+            }
+            
+            // 结束游戏
+            function endGame() {
+                clearInterval(timerInterval);
+                isPlaying = false;
+                startButton.disabled = false;
+                
+                const endTime = new Date().getTime();
+                const totalTime = (endTime - startTime) / 1000;
+                
+                resultDisplay.innerHTML = `
+                    <div class="game-summary">
+                        <h3>游戏总结 Game Summary</h3>
+                        <p>恭喜完成！用时: ${totalTime.toFixed(2)} 秒</p>
+                        <p>Congratulations! Time: ${totalTime.toFixed(2)} seconds</p>
+                        <p>方格大小 Grid Size: ${gridSize}×${gridSize}</p>
+                    </div>
+                `;
+            }
+            
+            // 事件监听
+            startButton.addEventListener('click', startGame);
+        })();
+        
+        // 记忆扑克牌游戏
+        (function() {
+            const gridContainer = document.getElementById('memory-grid');
+            const startButton = document.getElementById('memory-start');
+            const restartButton = document.getElementById('memory-restart');
+            const pairsSelect = document.getElementById('memory-pairs');
+            const timerDisplay = document.getElementById('memory-timer');
+            const movesDisplay = document.getElementById('memory-moves');
+            const resultDisplay = document.getElementById('memory-result');
+            
+            let cardValues = [];
+            let flippedCards = [];
+            let matchedPairs = 0;
+            let moves = 0;
+            let canFlip = true;
+            let startTime;
+            let timerInterval;
+            
+            // 卡片符号
+            const symbols = ['♥', '♦', '♣', '♠', '★', '☆', '☀', '☁', '☂', '☃'];
+            
+            // 初始化游戏
+            function initGame() {
+                const pairCount = parseInt(pairsSelect.value);
+                cardValues = [];
+                flippedCards = [];
+                matchedPairs = 0;
+                moves = 0;
+                canFlip = true;
+                
+                // 生成卡片对
+                for (let i = 0; i < pairCount; i++) {
+                    cardValues.push(symbols[i]);
+                    cardValues.push(symbols[i]);
+                }
+                
+                // 打乱顺序
+                cardValues = cardValues.sort(() => Math.random() - 0.5);
+                
+                // 创建网格
+                createGrid();
+                
+                // 更新UI
+                movesDisplay.textContent = `翻牌次数 Moves: ${moves}`;
+                resultDisplay.textContent = '';
+                startButton.disabled = true;
+                restartButton.disabled = false;
+                
+                // 启动计时器
+                startTime = new Date().getTime();
+                timerInterval = setInterval(updateTimer, 10);
+            }
+            
+            // 更新计时器
+            function updateTimer() {
+                const currentTime = new Date().getTime();
+                const elapsedTime = currentTime - startTime;
+                
+                const minutes = Math.floor(elapsedTime / 60000);
+                const seconds = Math.floor((elapsedTime % 60000) / 1000);
+                const milliseconds = Math.floor(elapsedTime % 1000);
+                
+                timerDisplay.textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+            }
+            
+            // 创建网格
+            function createGrid() {
+                gridContainer.innerHTML = '';
+                
+                // 根据牌对数确定网格大小
+                let columns = 4;
+                if (cardValues.length > 16) columns = 5;
+                if (cardValues.length > 20) columns = 6;
+                
+                gridContainer.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+                
+                // 创建卡片
+                cardValues.forEach((value, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'memory-card';
+                    card.dataset.index = index;
+                    
+                    const cardInner = document.createElement('div');
+                    cardInner.className = 'memory-card-inner';
+                    
+                    const cardFront = document.createElement('div');
+                    cardFront.className = 'memory-card-front';
+                    cardFront.textContent = value;
+                    
+                    const cardBack = document.createElement('div');
+                    cardBack.className = 'memory-card-back';
+                    
+                    cardInner.appendChild(cardFront);
+                    cardInner.appendChild(cardBack);
+                    card.appendChild(cardInner);
+                    
+                    card.addEventListener('click', flipCard);
+                    gridContainer.appendChild(card);
+                });
+            }
+            
+            // 翻牌
+            function flipCard() {
+                if (!canFlip || this.classList.contains('flipped') || this.classList.contains('matched')) {
+                    return;
+                }
+                
+                this.classList.add('flipped');
+                flippedCards.push(this);
+                
+                // 检查是否翻了两张牌
+                if (flippedCards.length === 2) {
+                    moves++;
+                    movesDisplay.textContent = `翻牌次数 Moves: ${moves}`;
+                    
+                    checkForMatch();
+                }
+            }
+            
+            // 检查是否匹配
+            function checkForMatch() {
+                canFlip = false;
+                
+                const card1 = flippedCards[0];
+                const card2 = flippedCards[1];
+                
+                const value1 = cardValues[parseInt(card1.dataset.index)];
+                const value2 = cardValues[parseInt(card2.dataset.index)];
+                
+                if (value1 === value2) {
+                    // 匹配成功
+                    card1.classList.add('matched');
+                    card2.classList.add('matched');
+                    
+                    matchedPairs++;
+                    flippedCards = [];
+                    canFlip = true;
+                    
+                    // 检查游戏是否结束
+                    if (matchedPairs === parseInt(pairsSelect.value)) {
+                        const endTime = new Date().getTime();
+                        const totalTime = (endTime - startTime) / 1000;
+                        clearInterval(timerInterval);
+                        
+                        setTimeout(() => {
+                            resultDisplay.innerHTML = `
+                                <div class="game-summary">
+                                    <h3>游戏总结 Game Summary</h3>
+                                    <p>恭喜完成！总共翻牌 ${moves} 次</p>
+                                    <p>Congratulations! Total moves: ${moves}</p>
+                                    <p>用时 Time: ${totalTime.toFixed(2)} 秒 seconds</p>
+                                    <p>牌对数 Pairs: ${pairsSelect.value}</p>
+                                </div>
+                            `;
+                        }, 500);
+                    }
+                } else {
+                    // 不匹配，翻回去
+                    setTimeout(() => {
+                        card1.classList.remove('flipped');
+                        card2.classList.remove('flipped');
+                        flippedCards = [];
+                        canFlip = true;
+                    }, 1000);
+                }
+            }
+            
+            // 事件监听
+            startButton.addEventListener('click', initGame);
+            restartButton.addEventListener('click', initGame);
+        })();
+        
+        // 反应力游戏
+        (function() {
+            const startButton = document.getElementById('reaction-start');
+            const cardsContainer = document.getElementById('reaction-cards-container');
+            const timerDisplay = document.getElementById('reaction-timer');
+            const scoreDisplay = document.getElementById('reaction-score');
+            const correctDisplay = document.getElementById('reaction-correct');
+            const wrongDisplay = document.getElementById('reaction-wrong');
+            const summaryDisplay = document.getElementById('reaction-summary');
+            
+            const cardCount = 5;
+            let cards = [];
+            let gameInterval;
+            let moveInterval;
+            let timeLeft = 60; // 1分钟 = 60秒
+            let score = 0;
+            let correctClicks = 0;
+            let wrongClicks = 0;
+            let isPlaying = false;
+            let greenCardIndex = -1;
+            let startTime;
+            
+            // 创建卡片
+            function createCards() {
+                cardsContainer.innerHTML = '';
+                cards = [];
+                
+                // 初始位置
+                const positions = [
+                    { top: '20px', left: '20px' },
+                    { top: '20px', left: '280px' },
+                    { top: '280px', left: '20px' },
+                    { top: '280px', left: '280px' },
+                    { top: '150px', left: '150px' }
+                ];
+                
+                for (let i = 0; i < cardCount; i++) {
+                    const card = document.createElement('div');
+                    card.className = 'reaction-card';
+                    card.dataset.index = i;
+                    card.style.top = positions[i].top;
+                    card.style.left = positions[i].left;
+                    card.addEventListener('click', handleCardClick);
+                    cardsContainer.appendChild(card);
+                    cards.push(card);
+                }
+            }
+            
+            // 开始游戏
+            function startGame() {
+                if (isPlaying) return;
+                
+                isPlaying = true;
+                startButton.disabled = true;
+                timeLeft = 60;
+                score = 0;
+                correctClicks = 0;
+                wrongClicks = 0;
+                summaryDisplay.style.display = 'none';
+                
+                createCards();
+                updateDisplay();
+                
+                // 启动计时器
+                startTime = new Date().getTime();
+                gameInterval = setInterval(updateGame, 1000);
+                
+                // 启动卡片移动 (每300毫秒移动一次)
+                moveInterval = setInterval(moveCards, 300);
+                
+                // 第一次设置绿色卡片
+                setGreenCard();
+            }
+            
+            // 移动卡片
+            function moveCards() {
+                if (!isPlaying) return;
+                
+                cards.forEach(card => {
+                    // 随机移动方向
+                    const direction = Math.floor(Math.random() * 4); // 0:上, 1:右, 2:下, 3:左
+                    const distance = 30 + Math.floor(Math.random() * 50);
+                    
+                    let newTop = parseInt(card.style.top) || 0;
+                    let newLeft = parseInt(card.style.left) || 0;
+                    
+                    switch(direction) {
+                        case 0: // 上
+                            newTop = Math.max(0, newTop - distance);
+                            break;
+                        case 1: // 右
+                            newLeft = Math.min(320, newLeft + distance);
+                            break;
+                        case 2: // 下
+                            newTop = Math.min(320, newTop + distance);
+                            break;
+                        case 3: // 左
+                            newLeft = Math.max(0, newLeft - distance);
+                            break;
+                    }
+                    
+                    card.style.top = newTop + 'px';
+                    card.style.left = newLeft + 'px';
+                });
+            }
+            
+            // 更新游戏状态
+            function updateGame() {
+                timeLeft--;
+                updateDisplay();
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                } else {
+                    // 设置新的绿色卡片 (每2秒更换一次)
+                    if (timeLeft % 2 === 0) {
+                        setGreenCard();
+                    }
+                }
+            }
+            
+            // 设置绿色卡片
+            function setGreenCard() {
+                // 重置所有卡片为红色
+                cards.forEach(card => {
+                    card.className = 'reaction-card';
+                });
+                
+                // 随机选择一个卡片变为绿色
+                greenCardIndex = Math.floor(Math.random() * cardCount);
+                cards[greenCardIndex].classList.add('green');
+            }
+            
+            // 处理卡片点击
+            function handleCardClick(e) {
+                if (!isPlaying) return;
+                
+                const clickedIndex = parseInt(e.target.dataset.index);
+                e.target.classList.add('clicked');
+                setTimeout(() => {
+                    e.target.classList.remove('clicked');
+                }, 200);
+                
+                if (clickedIndex === greenCardIndex) {
+                    // 点击了绿色卡片
+                    score += 10;
+                    correctClicks++;
+                    
+                    // 立即设置新的绿色卡片
+                    setGreenCard();
+                } else {
+                    // 点击了错误的卡片
+                    score = Math.max(0, score - 5);
+                    wrongClicks++;
+                }
+                
+                updateDisplay();
+            }
+            
+            // 更新显示
+            function updateDisplay() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `剩余时间 Time Left: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                scoreDisplay.textContent = score;
+                correctDisplay.textContent = correctClicks;
+                wrongDisplay.textContent = wrongClicks;
+            }
+            
+            // 结束游戏
+            function endGame() {
+                clearInterval(gameInterval);
+                clearInterval(moveInterval);
+                isPlaying = false;
+                startButton.disabled = false;
+                
+                // 重置所有卡片
+                cards.forEach(card => {
+                    card.className = 'reaction-card';
+                });
+                
+                // 计算游戏时间
+                const endTime = new Date().getTime();
+                const totalTime = (endTime - startTime) / 1000;
+                
+                // 显示总结
+                summaryDisplay.innerHTML = `
+                    <h3>游戏总结 Game Summary</h3>
+                    <p>游戏时间 Time: ${totalTime.toFixed(2)} 秒 seconds</p>
+                    <p>最终得分 Final Score: ${score}</p>
+                    <p>正确点击 Correct Clicks: ${correctClicks}</p>
+                    <p>错误点击 Wrong Clicks: ${wrongClicks}</p>
+                    <p>准确率 Accuracy: ${correctClicks + wrongClicks > 0 ? Math.round((correctClicks / (correctClicks + wrongClicks)) * 100) : 0}%</p>
+                    <p>平均反应时间 Avg Reaction Time: ${correctClicks > 0 ? (totalTime / correctClicks * 1000).toFixed(0) : 0} ms</p>
+                `;
+                summaryDisplay.style.display = 'block';
+                
+                startButton.textContent = "重新开始 Play Again";
+            }
+            
+            // 事件监听
+            startButton.addEventListener('click', startGame);
+        })();
+        
+        // 斯特鲁普效应游戏
+        (function() {
+            const startButton = document.getElementById('stroop-start');
+            const wordDisplay = document.getElementById('stroop-word');
+            const colorOptions = document.querySelectorAll('.color-option');
+            const timerDisplay = document.getElementById('stroop-timer');
+            const countDisplay = document.getElementById('stroop-count');
+            const congruentDisplay = document.getElementById('stroop-congruent');
+            const incongruentDisplay = document.getElementById('stroop-incongruent');
+            const summaryDisplay = document.getElementById('stroop-summary');
+            
+            const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange'];
+            const colorNames = ['红', '绿', '蓝', '黄', '紫', '橙'];
+            const colorNamesEn = ['Red', 'Green', 'Blue', 'Yellow', 'Purple', 'Orange'];
+            
+            let testCount = 0;
+            let congruentTimes = [];
+            let incongruentTimes = [];
+            let currentTest = {};
+            let startTime;
+            let gameStartTime;
+            let isTesting = false;
+            let gameInterval;
+            let timeLeft = 60; // 1分钟 = 60秒
+            
+            // 开始测试
+            function startTest() {
+                if (isTesting) return;
+                
+                isTesting = true;
+                testCount = 0;
+                congruentTimes = [];
+                incongruentTimes = [];
+                startButton.disabled = true;
+                wordDisplay.textContent = "准备开始 Get Ready";
+                wordDisplay.style.color = "#5E5343";
+                summaryDisplay.style.display = 'none';
+                timeLeft = 60;
+                
+                // 记录游戏开始时间
+                gameStartTime = new Date().getTime();
+                
+                // 启动计时器
+                gameInterval = setInterval(updateGameTimer, 1000);
+                
+                // 延迟后开始第一个测试
+                setTimeout(runTest, 1000);
+            }
+            
+            // 更新游戏计时器
+            function updateGameTimer() {
+                timeLeft--;
+                updateDisplay();
+                
+                if (timeLeft <= 0) {
+                    endTest();
+                }
+            }
+            
+            // 运行单个测试
+            function runTest() {
+                if (!isTesting) return;
+                
+                testCount++;
+                
+                // 随机选择颜色和文字
+                const colorIndex = Math.floor(Math.random() * colors.length);
+                const wordIndex = Math.floor(Math.random() * colorNames.length);
+                
+                const color = colors[colorIndex];
+                const word = colorNames[wordIndex];
+                const wordEn = colorNamesEn[wordIndex];
+                
+                // 记录测试类型 (一致或不一致)
+                currentTest = {
+                    color: color,
+                    word: word,
+                    wordEn: wordEn,
+                    isCongruent: colorIndex === wordIndex,
+                    startTime: new Date().getTime()
+                };
+                
+                // 更新显示
+                wordDisplay.textContent = `${word} ${wordEn}`;
+                wordDisplay.style.color = color;
+            }
+            
+            // 处理颜色选择
+            function handleColorSelection(e) {
+                if (!isTesting) return;
+                
+                const selectedColor = e.target.dataset.color;
+                const reactionTime = new Date().getTime() - currentTest.startTime;
+                
+                // 检查是否正确
+                if (selectedColor === currentTest.color) {
+                    // 记录反应时间
+                    if (currentTest.isCongruent) {
+                        congruentTimes.push(reactionTime);
+                    } else {
+                        incongruentTimes.push(reactionTime);
+                    }
+                    
+                    // 更新显示
+                    updateDisplay();
+                    
+                    // 立即开始下一个测试
+                    runTest();
+                } else {
+                    // 错误选择，提示并重新开始当前测试
+                    wordDisplay.textContent = "错误！ Wrong!";
+                    setTimeout(() => {
+                        runTest();
+                    }, 300);
+                }
+            }
+            
+            // 结束测试
+            function endTest() {
+                clearInterval(gameInterval);
+                isTesting = false;
+                startButton.disabled = false;
+                wordDisplay.textContent = "测试完成 Test Complete";
+                wordDisplay.style.color = "#5E5343";
+                startButton.textContent = "重新开始 Restart";
+                
+                // 计算游戏时间
+                const endTime = new Date().getTime();
+                const totalTime = (endTime - gameStartTime) / 1000;
+                
+                // 显示总结
+                const congruentAvg = congruentTimes.length > 0 ? 
+                    congruentTimes.reduce((a, b) => a + b, 0) / congruentTimes.length : 0;
+                const incongruentAvg = incongruentTimes.length > 0 ? 
+                    incongruentTimes.reduce((a, b) => a + b, 0) / incongruentTimes.length : 0;
+                
+                summaryDisplay.innerHTML = `
+                    <h3>测试总结 Test Summary</h3>
+                    <p>测试时间 Time: ${totalTime.toFixed(2)} 秒 seconds</p>
+                    <p>完成测试 Tests Completed: ${testCount}</p>
+                    <p>一致条件平均时间 Congruent Avg: ${congruentAvg.toFixed(0)} ms</p>
+                    <p>不一致条件平均时间 Incongruent Avg: ${incongruentAvg.toFixed(0)} ms</p>
+                    <p>差异 Difference: ${(incongruentAvg - congruentAvg).toFixed(0)} ms</p>
+                    <p>斯特鲁普效应强度 Stroop Effect Strength: ${congruentAvg > 0 ? 
+                        ((incongruentAvg - congruentAvg) / congruentAvg * 100).toFixed(1) : 0}%</p>
+                `;
+                summaryDisplay.style.display = 'block';
+            }
+            
+            // 更新显示
+            function updateDisplay() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `剩余时间 Time Left: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                countDisplay.textContent = testCount;
+                
+                if (congruentTimes.length > 0) {
+                    const congruentAvg = congruentTimes.reduce((a, b) => a + b, 0) / congruentTimes.length;
+                    congruentDisplay.textContent = congruentAvg.toFixed(0);
+                }
+                
+                if (incongruentTimes.length > 0) {
+                    const incongruentAvg = incongruentTimes.reduce((a, b) => a + b, 0) / incongruentTimes.length;
+                    incongruentDisplay.textContent = incongruentAvg.toFixed(0);
+                }
+            }
+            
+            // 事件监听
+            startButton.addEventListener('click', startTest);
+            colorOptions.forEach(option => {
+                option.addEventListener('click', handleColorSelection);
+            });
+        })();
+    </script>
+</body>
+</html>
